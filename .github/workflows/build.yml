@@ -1,0 +1,5 @@
+xcrun clang -target arm64-apple-ios15.0 \
+  -isysroot "$(xcrun --sdk iphoneos --show-sdk-path)" \
+  -dynamiclib -fobjc-arc \
+  -framework UIKit -framework Foundation -framework CoreGraphics \
+  -o crack_ballsace.dylib crack_ballsace.m
