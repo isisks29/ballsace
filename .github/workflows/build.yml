@@ -1,5 +1,34 @@
-xcrun clang -target arm64-apple-ios15.0 \
-  -isysroot "$(xcrun --sdk iphoneos --show-sdk-path)" \
-  -dynamiclib -fobjc-arc \
-  -framework UIKit -framework Foundation -framework CoreGraphics \
-  -o crack_ballsace.dylib crack_ballsace.m
+name: Build dylib
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Compile dylib
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Compile
+        run: |
+          xcrun clang -target arm64-apple-ios15.0 \
+            -isysroot "$(xcrun --sdk iphoneos --show-sdk-path)" \
+            -dynamiclib -fobjc-arc \
+            -framework UIKit -framework Foundation -framework CoreGraphics \
+            -o crack_ballsace.dylib crack_ballsace.m
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dylib
+          path: crack_ballsace.dylib
